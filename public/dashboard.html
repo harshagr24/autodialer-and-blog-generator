@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autodialer Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: white;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+        h1::before {
+            content: '';
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .card h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .btn:active {
+            transform: translateY(0);
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        .btn-success {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+        textarea {
+            width: 100%;
+            min-height: 120px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 14px;
+            resize: vertical;
+            margin-bottom: 10px;
+        }
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+        .chat-container {
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .chat-input-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .chat-input {
+            flex: 1;
+            padding: 12px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 25px;
+            font-size: 16px;
+        }
+        .chat-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        .chat-messages {
+            max-height: 300px;
+            overflow-y: auto;
+            margin-bottom: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 10px;
+        }
+        .message.user {
+            background: #667eea;
+            color: white;
+            margin-left: 20%;
+        }
+        .message.assistant {
+            background: white;
+            border: 1px solid #e0e0e0;
+            margin-right: 20%;
+        }
+        .logs-table {
+            width: 100%;
+            margin-top: 15px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: block;
+        }
+        .logs-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .logs-table th,
+        .logs-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        .logs-table th {
+            background: #f8f9fa;
+            position: sticky;
+            top: 0;
+        }
+        .status-badge {
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        .status-completed { background: #d4edda; color: #155724; }
+        .status-failed { background: #f8d7da; color: #721c24; }
+        .status-busy { background: #fff3cd; color: #856404; }
+        .status-in-progress { background: #d1ecf1; color: #0c5460; }
+        .alert {
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .alert-error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Autodialer Dashboard</h1>
+        
+        <div style="text-align: center; margin-bottom: 20px;">
+            <a href="/blog.html" class="btn" style="text-decoration: none; display: inline-block;">Go to Blog</a>
+        </div>
+        
+        <!-- Statistics Section -->
+        <div class="card" style="grid-column: 1 / -1;">
+            <h2>Call Statistics</h2>
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-number" id="totalCalls">0</div>
+                    <div class="stat-label">Total Calls</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="completedCalls">0</div>
+                    <div class="stat-label">Completed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="failedCalls">0</div>
+                    <div class="stat-label">Failed</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" id="inProgressCalls">0</div>
+                    <div class="stat-label">In Progress</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- Phone Numbers Management -->
+            <div class="card">
+                <h2>Phone Numbers</h2>
+                <textarea id="phoneNumbers" placeholder="Paste phone numbers here (one per line)&#10;+918529166564&#10;+919876543210&#10;..."></textarea>
+                <input type="file" id="fileUpload" accept=".txt,.csv" style="display: none;">
+                <button class="btn" onclick="document.getElementById('fileUpload').click()">Upload File</button>
+                <button class="btn btn-success" onclick="saveNumbers()">Save Numbers</button>
+                <button class="btn btn-danger" onclick="clearNumbers()">Clear All Numbers</button>
+                <div id="numberStatus"></div>
+            </div>
+
+            <!-- Calling Controls -->
+            <div class="card">
+                <h2>Calling Controls</h2>
+                <p>Numbers loaded: <strong id="numbersCount">0</strong></p>
+                <div id="callProgress" style="margin: 10px 0; padding: 10px; background: #f8f9fa; border-radius: 5px; display: none;">
+                    <strong>Calling Progress:</strong><br>
+                    <span style="font-size: 18px; color: #27ae60;">Call <span id="currentCall">0</span> of <span id="totalCalls">0</span></span>
+                    <div style="width: 100%; background: #ddd; border-radius: 10px; margin-top: 8px; height: 25px; overflow: hidden;">
+                        <div id="progressBar" style="width: 0%; background: linear-gradient(90deg, #27ae60, #2ecc71); height: 100%; border-radius: 10px; transition: width 0.3s; display: flex; align-items: center; justify-content: center; color: white; font-weight: bold; font-size: 12px;">
+                            <span id="progressPercent">0%</span>
+                        </div>
+                    </div>
+                    <p style="margin-top: 8px; font-size: 12px; color: #666;">
+                        Waiting for each call to complete before starting next one...
+                    </p>
+                </div>
+                <button class="btn btn-success" onclick="startCalling()" style="width: 100%; margin: 10px 0;">
+                    Start Calling All Numbers
+                </button>
+                <button class="btn btn-danger" onclick="stopCalling()" style="width: 100%;">
+                    Stop Calling
+                </button>
+                <button class="btn" onclick="refreshStats()" style="width: 100%; margin: 10px 0;">
+                    Refresh Statistics
+                </button>
+                <div id="queueStatus"></div>
+            </div>
+        </div>
+
+        <!-- AI Chat Interface -->
+        <div class="chat-container">
+            <h2>AI Assistant</h2>
+            <p style="color: #666; margin-bottom: 15px;">Ask me to make calls, upload numbers, show logs, or start calling all numbers!</p>
+            <div class="chat-messages" id="chatMessages"></div>
+            <div class="chat-input-group">
+                <button class="btn" id="voiceBtn" onclick="toggleVoiceRecording()" style="min-width: 120px;">Voice</button>
+                <input type="text" class="chat-input" id="chatInput" placeholder="Type a command... or use voice">
+                <button class="btn" onclick="sendChatMessage()">Send</button>
+            </div>
+            <div id="voiceStatus" style="margin-top: 10px;"></div>
+        </div>
+
+        <!-- Call Logs -->
+        <div class="card" style="grid-column: 1 / -1; margin-top: 20px;">
+            <h2>Recent Call Logs</h2>
+            <div class="logs-table">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Phone Number</th>
+                            <th>Status</th>
+                            <th>Call SID</th>
+                        </tr>
+                    </thead>
+                    <tbody id="logsTableBody">
+                        <tr>
+                            <td colspan="4" style="text-align: center; color: #999;">No calls yet</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let isRecording = false;
+
+        // Load numbers on page load
+        window.onload = function() {
+            loadNumbers();
+            refreshStats();
+            setInterval(refreshStats, 5000); // Auto-refresh every 5 seconds
+        };
+
+        // Handle file upload
+        document.getElementById('fileUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('phoneNumbers').value = event.target.result;
+                };
+                reader.readAsText(file);
+            }
+        });
+
+        // Handle Enter key in chat
+        document.getElementById('chatInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendChatMessage();
+            }
+        });
+
+        // Voice Recording Functions
+        function toggleVoiceRecording() {
+            if (!isRecording) {
+                startRecording();
+            } else {
+                stopRecording();
+            }
+        }
+
+        async function startRecording() {
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                mediaRecorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
+                audioChunks = [];
+
+                mediaRecorder.ondataavailable = (event) => {
+                    audioChunks.push(event.data);
+                };
+
+                mediaRecorder.onstop = async () => {
+                    const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                    await processVoiceCommand(audioBlob);
+                    stream.getTracks().forEach(track => track.stop());
+                };
+
+                mediaRecorder.start();
+                isRecording = true;
+                document.getElementById('voiceBtn').textContent = 'Stop';
+                document.getElementById('voiceBtn').style.backgroundColor = '#e74c3c';
+                document.getElementById('voiceStatus').innerHTML = '<div style="color: #e74c3c; font-weight: bold;">Recording...</div>';
+            } catch (error) {
+                alert('Microphone access denied. Please allow microphone access to use voice commands.');
+                console.error('Error accessing microphone:', error);
+            }
+        }
+
+        function stopRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+                isRecording = false;
+                document.getElementById('voiceBtn').textContent = 'Voice';
+                document.getElementById('voiceBtn').style.backgroundColor = '#3498db';
+                document.getElementById('voiceStatus').innerHTML = '<div style="color: #3498db;">Processing your voice command...</div>';
+            }
+        }
+
+        async function processVoiceCommand(audioBlob) {
+            try {
+                const formData = new FormData();
+                formData.append('audio', audioBlob, 'voice_command.webm');
+
+                const response = await fetch('/voice_commands/process_voice', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.error || `HTTP ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Voice command result:', result);
+                
+                if (result.transcription || result.transcribed_text) {
+                    const transcription = result.transcription || result.transcribed_text;
+                    // Set the transcribed text in the chat input
+                    document.getElementById('chatInput').value = transcription;
+                    document.getElementById('voiceStatus').innerHTML = `<div style="color: #27ae60;">Transcribed: "${transcription}"</div>`;
+                    
+                    // Automatically send the command
+                    setTimeout(() => {
+                        sendChatMessage();
+                    }, 500);
+                } else {
+                    document.getElementById('voiceStatus').innerHTML = `<div style="color: #e74c3c;">Error: ${result.error || 'No transcription received'}</div>`;
+                }
+            } catch (error) {
+                console.error('Error processing voice command:', error);
+                document.getElementById('voiceStatus').innerHTML = `<div style="color: #e74c3c;">Error: ${error.message}</div>`;
+            }
+        }
+
+        function loadNumbers() {
+            fetch('/phone_numbers')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.numbers && data.numbers.length > 0) {
+                        document.getElementById('phoneNumbers').value = data.numbers.join('\n');
+                        document.getElementById('numbersCount').textContent = data.numbers.length;
+                    }
+                });
+        }
+
+        function saveNumbers() {
+            const numbers = document.getElementById('phoneNumbers').value;
+            fetch('/phone_numbers', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ numbers: numbers })
+            })
+            .then(r => r.json())
+            .then(data => {
+                showStatus('numberStatus', data.message, 'success');
+                document.getElementById('numbersCount').textContent = data.count;
+            })
+            .catch(err => showStatus('numberStatus', 'Error saving numbers', 'error'));
+        }
+
+        function generateTestNumbers() {
+            fetch('/phone_numbers/generate_test_numbers', { method: 'POST' })
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('phoneNumbers').value = data.numbers.join('\n');
+                    document.getElementById('numbersCount').textContent = data.numbers.length;
+                    showStatus('numberStatus', data.message, 'success');
+                })
+                .catch(err => showStatus('numberStatus', 'Error generating numbers', 'error'));
+        }
+
+        function clearNumbers() {
+            if (confirm('Are you sure you want to clear all loaded phone numbers?')) {
+                document.getElementById('phoneNumbers').value = '';
+                fetch('/phone_numbers', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ numbers: '' })
+                })
+                .then(r => r.json())
+                .then(data => {
+                    document.getElementById('numbersCount').textContent = '0';
+                    showStatus('numberStatus', 'All numbers cleared', 'success');
+                })
+                .catch(err => showStatus('numberStatus', 'Error clearing numbers', 'error'));
+            }
+        }
+
+        function startCalling() {
+            fetch('/call_queue/start', { method: 'POST' })
+                .then(r => r.json())
+                .then(data => {
+                    if (data.error) {
+                        showStatus('queueStatus', data.error, 'error');
+                    } else {
+                        showStatus('queueStatus', data.message, 'success');
+                        setTimeout(refreshStats, 2000);
+                    }
+                })
+                .catch(err => showStatus('queueStatus', 'Error starting calls', 'error'));
+        }
+
+        function stopCalling() {
+            fetch('/call_queue/stop', { method: 'POST' })
+                .then(r => r.json())
+                .then(data => showStatus('queueStatus', data.message, 'success'))
+                .catch(err => showStatus('queueStatus', 'Error stopping calls', 'error'));
+        }
+
+        function refreshStats() {
+            // Show loading indicator
+            document.getElementById('totalCalls').innerHTML = '<small>...</small>';
+            
+            fetch('/call_queue/status')
+                .then(r => r.json())
+                .then(data => {
+                    if (data.statistics) {
+                        document.getElementById('totalCalls').textContent = data.statistics.total;
+                        document.getElementById('completedCalls').textContent = data.statistics.completed;
+                        document.getElementById('failedCalls').textContent = data.statistics.failed;
+                        document.getElementById('inProgressCalls').textContent = data.statistics.in_progress;
+                    }
+                    
+                    // Update call queue progress
+                    if (data.queue_status) {
+                        const isRunning = data.queue_status.is_running;
+                        const currentCall = data.queue_status.current_call;
+                        const totalNumbers = data.queue_status.total_numbers;
+                        
+                        if (isRunning && currentCall > 0) {
+                            document.getElementById('callProgress').style.display = 'block';
+                            document.getElementById('currentCall').textContent = currentCall;
+                            document.getElementById('totalCalls').textContent = totalNumbers;
+                            const progress = (currentCall / totalNumbers) * 100;
+                            document.getElementById('progressBar').style.width = progress + '%';
+                            document.getElementById('progressPercent').textContent = Math.round(progress) + '%';
+                        } else {
+                            document.getElementById('callProgress').style.display = 'none';
+                        }
+                    }
+                    
+                    if (data.recent_calls && data.recent_calls.length > 0) {
+                        updateLogsTable(data.recent_calls);
+                    }
+                })
+                .catch(err => {
+                    console.error('Error refreshing stats:', err);
+                    document.getElementById('totalCalls').textContent = '?';
+                });
+        }
+
+        function updateLogsTable(logs) {
+            const tbody = document.getElementById('logsTableBody');
+            tbody.innerHTML = logs.map(log => `
+                <tr>
+                    <td>${new Date(log.timestamp).toLocaleString()}</td>
+                    <td>${log.phone_number}</td>
+                    <td><span class="status-badge status-${log.status}">${log.status}</span></td>
+                    <td>${log.call_sid || log.error || 'N/A'}</td>
+                </tr>
+            `).join('');
+        }
+
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            if (!message) return;
+
+            addChatMessage('user', message);
+            input.value = '';
+
+            fetch('/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ command: message })
+            })
+            .then(r => r.json())
+            .then(data => {
+                const response = data.message || data.error || JSON.stringify(data);
+                addChatMessage('assistant', response);
+                
+                // Refresh data after command
+                setTimeout(() => {
+                    loadNumbers();
+                    refreshStats();
+                }, 1000);
+            })
+            .catch(err => addChatMessage('assistant', 'Error: ' + err.message));
+        }
+
+        function addChatMessage(role, text) {
+            const messages = document.getElementById('chatMessages');
+            const div = document.createElement('div');
+            div.className = `message ${role}`;
+            div.textContent = text;
+            messages.appendChild(div);
+            messages.scrollTop = messages.scrollHeight;
+        }
+
+        function showStatus(elementId, message, type) {
+            const element = document.getElementById(elementId);
+            element.innerHTML = `<div class="alert alert-${type}">${message}</div>`;
+            setTimeout(() => element.innerHTML = '', 5000);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Autodialer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .record-button {
+            background-color: #ff4444;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 25px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px 0;
+            transition: background-color 0.3s;
+        }
+        .record-button.recording {
+            background-color: #cc0000;
+            animation: pulse 1.5s infinite;
+        }
+        .status {
+            margin: 20px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background-color: #dff0d8;
+            color: #3c763d;
+        }
+        .error {
+            background-color: #f2dede;
+            color: #a94442;
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        .logs {
+            margin-top: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        .instructions {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #e7f3fe;
+            border-left: 3px solid #2196F3;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Voice Autodialer</h1>
+        
+        <div class="instructions">
+            <h3>How to use:</h3>
+            <p>1. Click "Start Recording" and say your command</p>
+            <p>2. Example commands:</p>
+            <ul>
+                <li>"Call +918529166564"</li>
+                <li>"Dial +91 phone_number"</li>
+            </ul>
+        </div>
+
+        <button id="recordButton" class="record-button">Start Recording</button>
+        <div id="status" class="status"></div>
+        <div id="logs" class="logs"></div>
+    </div>
+
+    <script>
+        let mediaRecorder;
+        let audioChunks = [];
+        let recording = false;
+
+        document.getElementById('recordButton').addEventListener('click', toggleRecording);
+
+        async function toggleRecording() {
+            const button = document.getElementById('recordButton');
+            const status = document.getElementById('status');
+
+            if (!recording) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+                    mediaRecorder = new MediaRecorder(stream);
+                    audioChunks = [];
+
+                    mediaRecorder.addEventListener('dataavailable', event => {
+                        if (event.data.size > 0) {
+                            audioChunks.push(event.data);
+                        }
+                    });
+
+                    mediaRecorder.addEventListener('stop', () => {
+                        const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+                        console.log('Audio blob size:', audioBlob.size, 'bytes');
+                        sendAudioToServer(audioBlob);
+                    });
+
+                    mediaRecorder.start();
+                    recording = true;
+                    button.textContent = 'Stop Recording';
+                    button.classList.add('recording');
+                    status.textContent = 'Recording... Speak your command';
+                    status.className = 'status';
+                } catch (err) {
+                    console.error('Error accessing microphone:', err);
+                    status.textContent = 'Error accessing microphone. Please make sure you have given permission.';
+                    status.className = 'status error';
+                }
+            } else {
+                mediaRecorder.stop();
+                recording = false;
+                button.textContent = 'Start Recording';
+                button.classList.remove('recording');
+                status.textContent = 'Processing your command...';
+            }
+        }
+
+        async function sendAudioToServer(audioBlob) {
+            const status = document.getElementById('status');
+            const logs = document.getElementById('logs');
+            
+            status.textContent = 'Sending audio to server...';
+            status.className = 'status';
+            
+            const formData = new FormData();
+            formData.append('audio', audioBlob, 'command.webm');
+
+            try {
+                const response = await fetch('/voice_commands/process_voice', {
+                    method: 'POST',
+                    body: formData,
+                    credentials: 'same-origin',
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                const result = await response.json();
+                
+                if (!response.ok) {
+                    throw new Error(result.error || 'Server error');
+                }
+                
+                if (result.error) {
+                    status.textContent = `Error: ${result.error}`;
+                    status.className = 'status error';
+                    
+                    const logEntry = document.createElement('div');
+                    logEntry.textContent = `${new Date().toLocaleTimeString()}: Error - ${result.error}`;
+                    logEntry.style.color = '#a94442';
+                    logs.insertBefore(logEntry, logs.firstChild);
+                } else {
+                    status.textContent = `Command processed: "${result.transcribed_text}"`;
+                    status.className = 'status success';
+                    
+                    if (result.result && result.result.message) {
+                        const logEntry = document.createElement('div');
+                        logEntry.textContent = `${new Date().toLocaleTimeString()}: ${result.result.message}`;
+                        logs.insertBefore(logEntry, logs.firstChild);
+                    }
+                }
+            } catch (err) {
+                console.error('Error sending audio:', err);
+                status.textContent = `Error: ${err.message}`;
+                status.className = 'status error';
+                
+                const logEntry = document.createElement('div');
+                logEntry.textContent = `${new Date().toLocaleTimeString()}: Error - ${err.message}`;
+                logEntry.style.color = '#a94442';
+                logs.insertBefore(logEntry, logs.firstChild);
+            }
+        }
+    </script>
+</body>
+</html>

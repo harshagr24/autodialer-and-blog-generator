@@ -1,0 +1,242 @@
+[
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CA6450e5a99ab6a358bf9a85fb3237c84a",
+    "status": "queued",
+    "timestamp": "2025-11-05T17:00:41Z"
+  },
+  {
+    "phone_number": "+18001234567",
+    "error": "[HTTP 400] 21219 : Unable to create record\nThe number +18001234567 is unverified. Trial accounts may only make calls to verified numbers.\nhttps://www.twilio.com/docs/errors/21219\n\n",
+    "status": "failed",
+    "timestamp": "2025-11-05T17:12:56Z"
+  },
+  {
+    "phone_number": "+18001234567",
+    "error": "[HTTP 400] 21219 : Unable to create record\nThe number +18001234567 is unverified. Trial accounts may only make calls to verified numbers.\nhttps://www.twilio.com/docs/errors/21219\n\n",
+    "status": "failed",
+    "timestamp": "2025-11-05T17:13:34Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CA1d4ec2fed79050d633bae2764f05f107",
+    "status": "queued",
+    "timestamp": "2025-11-05T17:14:19Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CA09745088f7c7e81fa82d5b06fdfa707c",
+    "status": "queued",
+    "timestamp": "2025-11-05T17:14:43Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CAd1234490181390816c82983ff22ee951",
+    "status": "queued",
+    "timestamp": "2025-11-05T17:15:02Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CAd4d8281fb8c43d4d0a8618826f749cd3",
+    "status": "queued",
+    "timestamp": "2025-11-05T17:16:10Z"
+  },
+  {
+    "phone_number": "918529166564",
+    "call_sid": "CAf912e95e5bf418aa105b57672e284c22",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:04:02Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CA1cc82c048578efce9b766d4c14cdf100",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:13:19Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CA9061d07836052ab1092d2127ba157285",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:15:49Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "error": "[HTTP 400] 21219 : Unable to create record\nThe number +919473451562 is unverified. Trial accounts may only make calls to verified numbers.\nhttps://www.twilio.com/docs/errors/21219\n\n",
+    "status": "failed",
+    "timestamp": "2025-11-05T18:15:54Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CA19428d84b14cf06dbf9d0fe290bc070d",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:18:16Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CA7204aa8306b096e1a052fca7c4a16199",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:18:20Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CAf6016356a173c3188ade0c964bd7d2c2",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:19:06Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CAd279521c82a313c79f7178b266052603",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:29:54Z"
+  },
+  {
+    "phone_number": "9185291",
+    "error": "[HTTP 400] 21211 : Unable to create record\nThe phone number you are attempting to call, 9185291, is not valid.\nhttps://www.twilio.com/docs/errors/21211\n\n",
+    "status": "failed",
+    "timestamp": "2025-11-05T18:35:27Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CA52d77c50a82fa4b0f462bb38fc48ba38",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:36:30Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CA3afe96594ada251cd00d7e6bb3614f12",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:36:58Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CAaef728a3a2149ec4fdf46a292506a9df",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:37:03Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CA83cafe81849a3ecd8f44cd2f6da0f201",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:38:00Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CAe6061d4783643d5ff3f89e2ff17c7e6d",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:38:04Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CA3a2087eee31dd9733956989f375fdf16",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:38:48Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CA0df3c7baf42241c41fca453c36add2ee",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:38:52Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CAbe07a9ace474c6764b6d8dbd9d40a48f",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:41:18Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CA2b8851b52babd954980a1934f9d5db18",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:42:19Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CAc2501d64e4c21a43611cff195d11abe8",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:44:02Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CAc2501d64e4c21a43611cff195d11abe8",
+    "status": "completed",
+    "duration": 14,
+    "timestamp": "2025-11-05T18:44:29Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CA4606b7a2664996b41285825d26d9448b",
+    "status": "queued",
+    "timestamp": "2025-11-05T18:44:34Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CA4606b7a2664996b41285825d26d9448b",
+    "status": "no-answer",
+    "duration": 0,
+    "timestamp": "2025-11-05T18:45:24Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CAdf52673c77cf178a30576a13077066df",
+    "status": "queued",
+    "timestamp": "2025-11-05T19:05:50Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CAdf52673c77cf178a30576a13077066df",
+    "status": "completed",
+    "duration": 1,
+    "timestamp": "2025-11-05T19:06:06Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CA44326f8027437319d9ee6f7db2d33665",
+    "status": "queued",
+    "timestamp": "2025-11-05T19:06:11Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CA44326f8027437319d9ee6f7db2d33665",
+    "status": "completed",
+    "duration": 3,
+    "timestamp": "2025-11-05T19:06:27Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CA169fa062702c5d7e1a056661d3d9e6e9",
+    "status": "queued",
+    "timestamp": "2025-11-05T19:07:05Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CAf9c9cd0cfcf12c837148dd3e74636233",
+    "status": "queued",
+    "timestamp": "2025-11-06T07:38:13Z"
+  },
+  {
+    "phone_number": "+918529166564",
+    "call_sid": "CAf9c9cd0cfcf12c837148dd3e74636233",
+    "status": "completed",
+    "duration": 4,
+    "timestamp": "2025-11-06T07:38:28Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CAec432b5916cb6de965bbe000f3b7d4cb",
+    "status": "queued",
+    "timestamp": "2025-11-06T07:38:32Z"
+  },
+  {
+    "phone_number": "+919473451562",
+    "call_sid": "CAec432b5916cb6de965bbe000f3b7d4cb",
+    "status": "completed",
+    "duration": 3,
+    "timestamp": "2025-11-06T07:38:55Z"
+  },
+  {
+    "phone_number": "918529166564",
+    "call_sid": "CA610e66c7f6835ba280e12baa9be995fe",
+    "status": "queued",
+    "timestamp": "2025-11-06T07:39:35Z"
+  }
+]
